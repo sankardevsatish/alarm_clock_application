@@ -32,7 +32,6 @@ pipeline {
             }
             steps {
                 sh """
-                    ${SONAR_SCANNER_HOME}/bin/sonar-scanner \
                     -Dsonar.projectKey=my_python_project \
                     -Dsonar.sources=. \
                     -Dsonar.host.url=${SONAR_URL} \
