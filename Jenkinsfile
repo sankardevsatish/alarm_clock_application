@@ -14,13 +14,13 @@ pipeline {
                 REGISTRY_CREDENTIALS = credentials('docker-cred')
             }
             steps {
+              script {
                 sh 'docker build -t ${DOCKER_IMAGE} .'
-                
-                script {
                 docker.withRegistry('https://index.docker.io/v1/', "${REGISTRY_CREDENTIALS}") {
                     docker.image("${DOCKER_IMAGE}").push()
                   }
-                }
+              }  
+                
             }
         }
         
