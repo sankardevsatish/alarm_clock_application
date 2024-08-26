@@ -24,20 +24,16 @@ pipeline {
                 
             }
         }
-        
-        stage('Testing') {
-            environment {
-                SONAR_URL = "http://3.87.112.19:9000"
-                SONAR_AUTH_TOKEN = credentials('sonar-auth-token-id')
-            }
-            steps {
-                sh """
-                    -Dsonar.sources=. \
-                    -Dsonar.host.url=${SONAR_URL} \
-                    -Dsonar.login=${SONAR_AUTH_TOKEN}
-                """
-            }
-        }
+        stage('Deploy') {
+          steps {
+                script {
+                    // Use the Kubernetes CLI to apply the deployment
+                    withCredentials([file(credentialsId: 'kubeconfig-cred', variable: 'KUBECONFIG')]) {
+                        sh 'kubectl --kubeconfig=$KUBECONFIG apply -f Deployment.yaml'
+                    }
+                }
+        }        
+
     }
 }
 
