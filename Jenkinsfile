@@ -24,15 +24,30 @@ pipeline {
                 
             }
         }
-        stage('Deploy') {
-          steps {
+         stage('Configure Kubernetes') {
+            steps {
                 script {
-                    // Use the Kubernetes CLI to apply the deployment
-                    withCredentials([file(credentialsId: 'kubeconfig-cred', variable: 'KUBECONFIG')]) {
-                        sh 'kubectl --kubeconfig=$KUBECONFIG apply -f Deployment.yaml'
+                    // Assuming aws-cli is installed and configured
+                    withCredentials([usernamePassword(credentialsId: 'aws-cred-id', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        sh '''
+                        aws eks update-kubeconfig --name ${CLUSTER_NAME} --region ${REGION}
+                        '''
                     }
                 }
-        }        
+            }
+        }
+         stage('Deploy to Kubernetes') {
+            environment{
+                CLUSTER_NAME = "demo-cluster"
+                REGION = "us-east-1"
+            }
+            steps {
+                script {
+                    // Use the updated kubeconfig to apply the deployment
+                    sh 'kubectl apply -f Deployment.yaml'
+                }
+            }
+        }
 
     }
 }
