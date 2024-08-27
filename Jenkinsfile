@@ -39,11 +39,16 @@ pipeline {
          stage('Deploy to Kubernetes') {
             steps {
                 script {
-                    // Use the updated kubeconfig to apply the deployment
-                    sh 'kubectl apply -f Deployment.yaml'
+                    withCredentials([usernamePassword(credentialsId: 'aws-cred-id', usernameVariable: 'AWS_ACCESS_KEY_ID', passwordVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        sh '''
+                        export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                        export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                        kubectl apply -f Deployment.yaml --validate=false
+                        '''
+                    }
                 }
             }
-         } 
+        }
         }
 
     }
