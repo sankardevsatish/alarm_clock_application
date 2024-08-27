@@ -37,16 +37,13 @@ pipeline {
             }
         }
          stage('Deploy to Kubernetes') {
-            environment{
-                CLUSTER_NAME = "demo-cluster"
-                REGION = "us-east-1"
-            }
             steps {
                 script {
                     // Use the updated kubeconfig to apply the deployment
                     sh 'kubectl apply -f Deployment.yaml'
                 }
             }
+         } 
         }
 
     }
