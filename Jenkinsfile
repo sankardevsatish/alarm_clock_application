@@ -3,6 +3,7 @@ pipeline {
         docker {
             image 'docker:20.10.8-dind' // Replace with the Docker image you want to use
             args '-v /var/run/docker.sock:/var/run/docker.sock' // Mount Docker socket if needed for Docker-in-Docker
+            user 'root' // Run as root 
         }
     }
     
