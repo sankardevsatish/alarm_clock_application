@@ -8,9 +8,7 @@ pipeline {
     
     stages {
         stage('Checkout') {
-            steps {
-                sh 'git checkout'
-            }
+
         }
         
         stage('Build') {
