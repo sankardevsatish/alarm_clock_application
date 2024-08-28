@@ -7,10 +7,6 @@ pipeline {
     }
     
     stages {
-        stage('Checkout') {
-
-        }
-        
         stage('Build') {
             environment {
                 DOCKER_IMAGE = "vinuinstinct123/helloworld:${BUILD_NUMBER}"
