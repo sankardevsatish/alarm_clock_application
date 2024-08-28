@@ -3,7 +3,6 @@ pipeline {
         docker {
             image 'docker:20.10.8-dind' // Replace with the Docker image you want to use
             args '-v /var/run/docker.sock:/var/run/docker.sock' // Mount Docker socket if needed for Docker-in-Docker
-            user 'root' // Run as root 
         }
     }
     
@@ -15,7 +14,7 @@ pipeline {
             }
             steps {
               script {
-                sh 'docker build -t ${DOCKER_IMAGE} .'
+                sh ' sudo docker build -t ${DOCKER_IMAGE} .'
                 def dockerImage = docker.image("${DOCKER_IMAGE}")
                 docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
                     dockerImage.push()
