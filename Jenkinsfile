@@ -7,6 +7,14 @@ pipeline {
     }
     
     stages {
+        stage('Installalation') {
+            steps {
+                sh '''
+                apk add --no-cache python3 py3-pip
+                pip3 install awscli
+                '''
+            }
+        }        
         stage('Build') {
             environment {
                 DOCKER_IMAGE = "vinuinstinct123/helloworld:${BUILD_NUMBER}"
